@@ -32,8 +32,8 @@ class _HomeLayoutState extends State<HomeLayout> {
   }
 
   /// create database
-  void createDatabase() {
-    openDatabase(
+  void createDatabase() async{
+    database = await openDatabase(
         'path.db',
         version: 1,
         onCreate: (database, version) {
@@ -44,11 +44,7 @@ class _HomeLayoutState extends State<HomeLayout> {
         onOpen: (database) {
       getDataFromDatabase(database).then((value) {
         tasks = value;
-        setState(() {});
       });
-    }).then((value) {
-      database = value;
-      setState(() {});
     });
   }
 
@@ -64,10 +60,8 @@ class _HomeLayoutState extends State<HomeLayout> {
           .rawInsert(
               'INSERT INTO tasks (title, time, date, notes) VALUES("$title", "$time", "$date" , "notes")')
           .then((value) {
-        setState(() {});
         getDataFromDatabase(database).then((value) {
           tasks = value;
-          setState(() {});
         });
       });
     });
@@ -77,7 +71,6 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   Future<List<Map>> getDataFromDatabase(database) async {
     setState(() {});
-
     return await database.rawQuery('SELECT * FROM tasks');
   }
 
