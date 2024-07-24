@@ -33,7 +33,10 @@ class _HomeLayoutState extends State<HomeLayout> {
 
   /// create database
   void createDatabase() {
-    openDatabase('path.db', version: 1, onCreate: (database, version) {
+    openDatabase(
+        'path.db',
+        version: 1,
+        onCreate: (database, version) {
       database
           .execute(
               'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, time TEXT, date TEXT, notes TEXT)');
@@ -61,15 +64,12 @@ class _HomeLayoutState extends State<HomeLayout> {
           .rawInsert(
               'INSERT INTO tasks (title, time, date, notes) VALUES("$title", "$time", "$date" , "notes")')
           .then((value) {
-        print('$value inserted');
         setState(() {});
         getDataFromDatabase(database).then((value) {
           tasks = value;
           setState(() {});
         });
       });
-    }).catchError((error) {
-      print(error);
     });
   }
 
@@ -273,10 +273,8 @@ class _HomeLayoutState extends State<HomeLayout> {
                 time: timeController.text,
                 date: dateController.text,
               ).then((value) {
-                getDataFromDatabase(database).then((value) {
-                  Navigator.pop(context);
-                  changeBottomSheetState(isShow: true, icon: Icons.add);
-                });
+                Navigator.pop(context);
+                changeBottomSheetState(isShow: true, icon: Icons.add);
               });
             }
           } else {
